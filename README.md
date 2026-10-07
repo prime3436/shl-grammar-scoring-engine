@@ -51,14 +51,15 @@ Evaluated on candidate speech responses across 5 stratified folds:
 
 | Model | 5-Fold CV RMSE | Pearson Correlation ($r$) | Ensemble Weight |
 | :--- | :---: | :---: | :---: |
-| **LightGBM** | 0.6537 | 0.7708 | **50.8%** |
-| **CatBoost** | 0.6560 | 0.7690 | 8.3% |
-| **XGBoost** | 0.6539 | 0.7702 | 0.6% |
-| **ElasticNet** | 0.6600 | 0.7593 | 13.3% |
-| **Ridge** | 0.7127 | 0.7339 | 27.1% |
-| **Bayesian Ridge**| 0.6662 | 0.7540 | 0.0% |
-| **Ensemble (Raw)** | **0.6275** | **0.7882** | **100%** |
-| **Ensemble (Calibrated)** | **0.6239** | **0.7882** | **100%** |
+| **LightGBM** | 0.6426 | 0.7777 | 13.7% |
+| **CatBoost** | 0.6384 | 0.7822 | 14.4% |
+| **XGBoost** | 0.6368 | 0.7829 | 16.1% |
+| **ElasticNet** | 0.6346 | 0.7816 | 20.5% |
+| **Bayesian Ridge**| 0.6367 | 0.7782 | 15.2% |
+| **Ridge** | 0.7156 | 0.7384 | 16.8% |
+| **ExtraTrees** | 0.6896 | 0.7532 | 3.3% |
+| **Ensemble (Raw)** | **0.6091** | **0.8011** | **100%** |
+| **Ensemble (Calibrated)** | **0.6067** | **0.8011** | **100%** |
 
 ---
 
@@ -67,9 +68,12 @@ Evaluated on candidate speech responses across 5 stratified folds:
 ```
 shl-hiring-assessment-2026/
 ├── Dataset_Final/
-│   ├── extract_features.py            # Baseline acoustic & readability extractor
+│   ├── extract_cola_grammar_features.py # RoBERTa-CoLA sentence acceptability extractor
+│   ├── train_ultimate_grammar_pipeline.py # 7-model stacking pipeline with CoLA + POS
 │   ├── extract_wav2vec2_fast.py       # Multi-threaded Wav2Vec2 phonetic extractor
 │   ├── train_master_pipeline.py       # Master training, stacking & calibration pipeline
+│   ├── train_cola_features.csv        # Precomputed CoLA grammatical acceptability metrics
+│   ├── test_cola_features.csv         # Precomputed test CoLA metrics
 │   ├── train_features.csv             # Precomputed tabular acoustic & text features
 │   ├── test_features.csv              # Precomputed test features
 │   ├── train_transcripts.csv          # Whisper ASR candidate transcripts
@@ -78,11 +82,12 @@ shl-hiring-assessment-2026/
 │   ├── test_text_features.npy         # 768-d MPNet sentence embeddings
 │   ├── train_wav2vec2_features.npy    # 768-d Wav2Vec2 phonetic embeddings
 │   ├── test_wav2vec2_features.npy     # 768-d Wav2Vec2 phonetic embeddings
-│   └── submission.csv                 # Final calibrated submission file
+│   ├── submission.csv                 # Active submission (75% CoLA + 25% Prev Master)
+│   ├── submission_cola_blend.csv      # Blended CoLA + Prev Master submission
+│   ├── submission_cola_pure.csv       # Pure CoLA 7-model ensemble submission
+│   └── submission_trinity.csv         # 3-Way Trinity ensemble (CoLA + Master + Baseline)
 ├── shl_grammar_scoring_engine.ipynb   # Interactive analysis and training notebook
-├── train_multimodal_fast.py           # Fast acoustic & text modeling script
-├── run_transcription.py               # Whisper transcription runner
-├── submission.csv                     # Verified submission file ready for evaluation
+├── submission.csv                     # Ready-to-upload calibrated submission file
 └── README.md
 ```
 
