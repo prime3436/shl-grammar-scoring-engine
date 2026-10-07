@@ -1,0 +1,27 @@
+# Audio data files (1.6+ GB)
+*.wav
+*.mp3
+*.flac
+*.ogg
+
+# Python cache & build
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# CatBoost & model temporary directories
+catboost_info/
+lightning_logs/
+.ipynb_checkpoints/
+
+# OS artifacts
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
